@@ -1,0 +1,20 @@
+Each resturant is represented as a clojure record (which is
+equivelent to a Java class) with the following attributes:
+
+
+Type of Cuisine - 8
+Rating - 7
+Location - 6
+Price - 5
+BYOB - 4
+Atmosphere - 3
+Diner's Allergies - 2
+How long it has been in business - 1
+
+Each attribute is assigned a weight from 1 - 8 (1 being the least
+important, 8 being the most important) and is given a total score
+of how strongly it fits the user's search criteria.
+
+Perhaps include a "Potluck Dinner" option in which the user inputs
+ONE criteria, and the program randomly assigns all the rest. Then
+the resturant which most closely fits those criteria is returned.

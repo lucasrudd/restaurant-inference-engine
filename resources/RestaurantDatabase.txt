@@ -1,0 +1,32 @@
+m. henry, American, 4.5, 2.0, $$, true, Cafe, None, 4
+Fireside Restaurant & Lounge, American, 4.3, 2.2, $$$, false, Cafe, None, 9
+IHOP, American, 3.7, 5.4, $, false, Fast Casual, Nuts, 58
+Potbelly Sandwich Shop, American, 4.1, 1.1, $, false, Fast Casual, None, 39
+Vincent, American, 4.6, 2.5, $$, true, Trendy, Mussels, 6
+Bakers Square, American, 3.6, 1.6, $, false, Casual, Lactose, 40
+Firehouse Grill, Grill, 3.6, 2.2, $$, false, Casual, None, 100
+Old Country Buffet, American, 2.7, 3.8, $, true, Buffet, None, 34
+DMK Burger Bar, Hamburger, 4.3, 5.8, $$, true, Trendy, Shellfish, 6
+Uncommon Ground, American, 4.2, 4.6, $$, true, Brewpub, None, 15
+Fork, American, 4.3, 4.3, $$, true, Brewpub, None, 1
+Elizabeth Restaurant, American, 4.4, 4.3, $$$, true, Fine-dining, None, 7
+Glenn's Diner, Seafood, 4.3, 4.0, $$, false, Diner, Shellfish, 22
+North Pond, American, 4.3, 7.2, $$$, true, Modern, Lactose, 104
+Crosby's Kitchen, American, 4.3, 5.2, $, false, Casual, Nuts, 42
+Boka, American, 4.5, 6.0, $$$, false, Fine-dining, Nuts, 8
+Chicago Joe's, American, 3.7, 8.2, $$, false, Diner, Shellfish, 63
+Schwa Restaurant, American, 4.6, 10.1, $$, true, Modern, None, 14
+MK, American, 4.5, 9.1, $$$, false, Fine-dining, None, 3
+Nomi Restaurant, American, 4.5, 8.8, $$$, true, Modern, None, 8.8
+Rub's Backcounty Smokehouse, Barbecue, 4.4, 1.4, $, true, Cafe, None, 14
+Sam's Chicken & Rib, Barbecue, 3.4, 1.6, $, false, Casual, Nuts, 3
+Khan Barbeque Restaurant, Barbecue, 3.6, 3.4, $$, false, Casual, Nuts, 8
+Ali's BBQ Restaurant, Barbecue, 3.9, 3.9, $, false, Casual, None, 6
+Sun Wah BBQ, Chinese, 4.2, 2.8, $$, true, Buffet, Nuts, 2
+Vinh Phat BBQ, Barbecue, 1.0, 3.2, $, true, Casual, Nuts, 1
+Smylie Brothers Brewing Co., American, 4.5, 5.2, $, false, Brewpub, None, 
+Taste of Peru, Peruvian, 4.1, 1.1, $$, true, Casual, Shellfish, 4
+Heartland Cafe, Vegetarian, 4.0, .1, $$$, false, Trendy, None, 30
+bopNgrill, Burgers, 4.4, .9, $, false, Fast Casual, Lactose, 8
+J.B. Alberto's Pizza, Pizza, 4.3, .3, $$$, false, Casual, Lactose, 50
+My-Restaurant, Italian, 1.0, 1.0, $, true, Casual, None, 1
