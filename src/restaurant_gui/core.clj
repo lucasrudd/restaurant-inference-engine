@@ -6,8 +6,9 @@
             [seesaw.font :refer :all]))
 
 
-
+;A channel to communicate between threads
 (def user-input (chan))
+
 
 ;TODO: Fix the create-restaurant-label function
 (defn create-restaurant-label
@@ -56,12 +57,14 @@
   
   (>!! user-input new-input))
 
+
 (defn to-boolean
   [bool]
   
   (cond 
     (= "Yes" bool) true
-    (= "No"  bool) false))
+    (= "No"  bool) false
+    :else nil))
 
 
 (defn restaurant-selection-window 
@@ -111,10 +114,10 @@
                                    :border [20 10])
         
           rating         (combobox :model ["1 star and up"
-                                            "2 stars and up"
-                                            "3 stars and up"
-                                            "4 stars and up"
-                                            "5 stars"])
+                                           "2 stars and up"
+                                           "3 stars and up"
+                                           "4 stars and up"
+                                           "5 stars"])
          
           location-label (label :text "Distance in miles: "
                                 :font my-font
@@ -139,13 +142,14 @@
                                  :font my-font
                                  :border [20 10])
           
-          BYOB            (combobox :model ["Yes" "No"])
+          BYOB            (combobox :model ["No Preference" "Yes" "No"])
           
           atmosphere-label (label :text "Atmosphere: "
                                   :font my-font
                                   :border [20 10])
           
-          atmosphere      (combobox :model ["Brewpub"
+          atmosphere      (combobox :model ["Any"
+                                            "Brewpub"
                                             "Buffet"
                                             "Cafe"
                                             "Casual"
@@ -175,7 +179,7 @@
           
           confirm-button  (button
                             :text "Confirm"
-                            :listen [:action (fn [event] event (update-user-input [(text restaurant-name) (selection cuisine) (selection rating) (value location) (to-boolean (selection BYOB)) (selection atmosphere) (selection allergy)]))])
+                            :listen [:action (fn [event] event (update-user-input [(text restaurant-name) (selection cuisine) (selection rating) (str (value location)) (to-boolean (selection BYOB)) (selection atmosphere) (selection allergy)]))])
                          
           window-contents (vertical-panel :items [restaurant-name cuisine-label cuisine rating-label rating location-label location price-label price BYOB-label BYOB atmosphere-label atmosphere allergy-label allergy confirm-button])]
     

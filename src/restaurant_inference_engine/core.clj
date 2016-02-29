@@ -1,6 +1,7 @@
 (ns restaurant-inference-engine.core
   (:require [clojure.string :as str]
             [restaurant-inference-engine.priority-map :refer :all]
+            [comparative-restaurant-functions.comparative-restaurant-functions :refer :all]
             [restaurant-gui.core :refer :all]
             [clojure.core.async :as a 
                                 :refer [>! <! >!! <!! go chan buffer close!]])
@@ -13,7 +14,7 @@
 ; -----------------------------------------------------
 ;|                                                     |
 ;|  A Restaurant Selection Inference Engine.           |
-;|  For more information see doc/Restaurant Attributes  |
+;|  For more information see doc/Restaurant Attributes |
 ;|  and README.md                                      |
 ;|                                                     |
 ; -----------------------------------------------------
@@ -28,32 +29,15 @@
 (def ^:dynamic restaurant-vector)
 
 
-
-;The restaurant record definition
-(defrecord Restaurant [restaurant-name  cuisine 
-                       rating          location 
-                       price           BYOB 
-                       atmosphere      allergens 
-                       age])
-
-
 ;Below are some constants for the user-input array.
 ;These constants are used so accessing the user-input array
 ;is more descriptive, less ambiguous, and easier to alter
 ;if need be
 (def ^:const attribute-keys [:restaurant-name :cuisine 
-                             :rating         :location 
-                             :price          :BYOB 
-                             :atmosphere     :allergens 
+                             :rating          :location 
+                             :price           :BYOB 
+                             :atmosphere      :allergens 
                              :age])
-
-
-;Each value has a weight associated to it signaling its
-;relative importance in the search algorithm. Below are all
-;the definitions for the weights.
-;The weights are formated as a Restaurant for ease of access
-;but perhaps would make more sense formatted slightly differently
-(def ^:const weights (Restaurant. 9 8 7 6 5 4 3 2 1))
 
 
 
@@ -71,9 +55,11 @@
          format-data
          create-restaurant-map
          search
+         ;compare-restaurant-names
+         ;compare-rating
+         ;compare-locations
          calculate-relevance
-         compare-rating
-         String->Number
+         ;String->Number
          how-equal?
          print-top-ten)
 
@@ -170,32 +156,21 @@
         (recur remaining
                (assoc ordered-restaurants (keyword (:restaurant-name head)) (calculate-relevance head user-restaurant)))))))
 
-
-(defn compare-rating
-   [restaurant-rating user-rating]
   
-  (if (>= (String->Number restaurant-rating) (String->Number user-rating))
-    (:rating weights)
-    0))
 
 
-(defn String->Number
-  [s]
-   
-  (let [num (Double. (re-find #"\d+" s))]
-    (if (number? num)
-      num
-      nil)))
 
-
-(defn compare-restaurant-names
-  [restaurant-name user-name]
+;TODO: Figure out a way to write the if statement embedded in the
+;let statement as a single if-let statement.
+(defn calculate-relevance
+  "Calls how-equal? and makes sure
+   that the response is valid."
+  [restaurant user-restaurant]
   
-  (let [restaurant-length (count restaurant-name)
-        user-length (count user-name)]
-    (if (.contains restaurant-name user-name)
-      (* (double (/ user-length restaurant-length)) (:restaurant-name weights))
-      0.0)))
+  (let [restaurant-relevance-value (how-equal? restaurant user-restaurant)]
+    (if 
+      (neg? restaurant-relevance-value) (println "Error, relevance is less than zero")
+       restaurant-relevance-value)))
 
 
 ;TODO: Figure out a way to write write the binding, doseq, and set! functions
@@ -217,24 +192,13 @@
   (binding [relevance-value 0]
     (doseq [attribute restaurant]
       (cond
-        (= :rating (key attribute)) (set! relevance-value (+ relevance-value (compare-rating (val attribute) ((key attribute)user-restaurant))))
         (= :restaurant-name (key attribute)) (set! relevance-value (+ relevance-value (compare-restaurant-names (val attribute) ((key attribute)user-restaurant))))
-        (= (val attribute) ((key attribute)user-restaurant)) (set! relevance-value (+ relevance-value ((key attribute)weights)))))
+        (= :rating (key attribute)) (set! relevance-value (+ relevance-value (compare-rating (val attribute) ((key attribute)user-restaurant))))
+        (= :location (key attribute)) (set! relevance-value (+ relevance-value (compare-location (val attribute) ((key attribute)user-restaurant))))
+        (= (val attribute) ((key attribute)user-restaurant)) (set! relevance-value (+ relevance-value ((key attribute)(get-weights))))))
       (double relevance-value)))
-  
 
-;TODO: Figure out a way to write the if statement embedded in the
-;let statement as a single if-let statement.
-(defn calculate-relevance
-  "Calls how-equal? and makes sure
-   that the response is valid."
-  [restaurant user-restaurant]
-  
-  (let [restaurant-relevance-value (how-equal? restaurant user-restaurant)]
-    (if 
-      (neg? restaurant-relevance-value) (println "Error, relevance is less than zero")
-       restaurant-relevance-value)))
-  
+
 
 ;TODO: Rewrite this so that it dosen't loop over an index
 ;Use the take function or a recurssion of first & rest operations

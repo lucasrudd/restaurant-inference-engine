@@ -1,9 +1,11 @@
 (ns restaurant-inference-engine.core-test
   (:require [clojure.test :refer :all]
             [restaurant-inference-engine.core :refer :all]
+            [comparative-restaurant-functions.comparative-restaurant-functions :refer :all]
             [restaurant-inference-engine.priority-map :refer :all])
-  (:import [restaurant-inference-engine.core]
-           [restaurant-inference-engine.priority-map]))
+  (:import  [restaurant-inference-engine.core]
+            [comparative-restaurant-functions.comparative-restaurant-functions]
+            [restaurant-inference-engine.priority-map]))
 
 (def p (priority-map))
 
@@ -35,10 +37,10 @@
     (is (== 39 (how-equal? (nth test-restaurants 0) (nth test-restaurants 3))))
     (is (== 35 (how-equal? (nth test-restaurants 0) (nth test-restaurants 4))))
     (is (== 30 (how-equal? (nth test-restaurants 0) (nth test-restaurants 5))))
-    (is (== 24 (how-equal? (nth test-restaurants 0) (nth test-restaurants 6))))
-    (is (== 17 (how-equal? (nth test-restaurants 0) (nth test-restaurants 7))))
-    (is (==  9 (how-equal? (nth test-restaurants 0) (nth test-restaurants 8))))
-    (is (==  0 (how-equal? (nth test-restaurants 0) (nth test-restaurants 9))))))
+    (is (== 30 (how-equal? (nth test-restaurants 0) (nth test-restaurants 6))))
+    (is (== 23 (how-equal? (nth test-restaurants 0) (nth test-restaurants 7))))
+    (is (== 15 (how-equal? (nth test-restaurants 0) (nth test-restaurants 8))))
+    (is (==  6 (how-equal? (nth test-restaurants 0) (nth test-restaurants 9))))))
 
 
 (deftest compare-restaurant-names-test
@@ -48,12 +50,19 @@
     (is (== 4.5 (compare-restaurant-names "The Name" "Name")))
     (is (== 9.0 (compare-restaurant-names "100 percent" "100 percent")))))
 
+
 (deftest String->Number-test
   (testing "Testing String-Number function..."
     
     (is (== 10 (String->Number "10")))
     (is (== 10 (String->Number "10xxx")))
     (is (== 10 (String->Number "psx10")))))
+
+(deftest compare-location-test
+  (testing "Testing compare-restaurant-location function..."
+  
+  (is (== 6 (compare-location "1" "10")))
+  (is (== 0 (compare-location "10" "1")))))
 
 ;(deftest process-file-test
 ;  (testing "Testing process-file function..."
@@ -68,7 +77,7 @@
 
 
 ;(deftest create-restaurant-map-test
-;  (testing "Testing createrestaurant-map function"
+;  (testing "Testing create-restaurant-map function"
 ;                  ))
     
   
