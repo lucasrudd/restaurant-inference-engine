@@ -4,10 +4,15 @@
                                 :refer [>! <! >!! <!! go chan buffer close!]]
             [seesaw.core :refer :all]
             [seesaw.font :refer :all]))
-
+  ;(:import org.pushingpixels.substance.api.SubstanceLookAndFeel))
 
 ;A channel to communicate between threads
 (def user-input (chan))
+
+(def skin-setup
+ 
+  (future
+    (javax.swing.UIManager/setLookAndFeel "javax.swing.plaf.nimbus.NimbusLookAndFeel")))
 
 
 ;TODO: Fix the create-restaurant-label function
@@ -77,11 +82,11 @@
     :height 500
     :on-close :exit))
   
-  
 
 (def window-setup  
-  
-  (future 
+ 
+  (future
+    @skin-setup
     (let [my-font          (font :name "Arial"
                                  :size 22)
         
@@ -182,6 +187,6 @@
                             :listen [:action (fn [event] event (update-user-input [(text restaurant-name) (selection cuisine) (selection rating) (str (value location)) (to-boolean (selection BYOB)) (selection atmosphere) (selection allergy)]))])
                          
           window-contents (vertical-panel :items [restaurant-name cuisine-label cuisine rating-label rating location-label location price-label price BYOB-label BYOB atmosphere-label atmosphere allergy-label allergy confirm-button])]
-    
+      (selection! allergy "None")
       (restaurant-selection-window window-contents))))
 

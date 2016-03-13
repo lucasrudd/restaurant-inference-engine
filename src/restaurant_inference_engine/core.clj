@@ -55,11 +55,7 @@
          format-data
          create-restaurant-map
          search
-         ;compare-restaurant-names
-         ;compare-rating
-         ;compare-locations
          calculate-relevance
-         ;String->Number
          how-equal?
          print-top-ten)
 
@@ -156,9 +152,6 @@
         (recur remaining
                (assoc ordered-restaurants (keyword (:restaurant-name head)) (calculate-relevance head user-restaurant)))))))
 
-  
-
-
 
 ;TODO: Figure out a way to write the if statement embedded in the
 ;let statement as a single if-let statement.
@@ -176,13 +169,8 @@
 ;TODO: Figure out a way to write write the binding, doseq, and set! functions
 ;as a single recursive loop statment.
 ;TODO: At the moment how-equal? checks if things are EXACTLY equal.
-;how-equal? needs to check to see if a restaurant is 'x' miles OR CLOSER
-;if a restaurant is 'x' stars OR MORE and if a restaurant is 'x' price
-;OR LESS. Also check to see if PART of the name matches, not the whole thing.
-;For example, if I have a restaurant called My-Restaurant, a partial match should
-;be made if I search "Restaurant." This will need to use the weight system
-;and give 9 points for a total match, and 4.5 points for half a match
-;2.75 for a quarter match etc. Consider a 100 points scale to avoid FP values
+;how-equal? need to check if a restaurant is 'x' price OR LESS. 
+;Consider a 100 points scale to avoid FP values for the compare-names
 (defn how-equal?
   "The following two functions (how-equal? and calculate-relevance) work 
    in tandum to calculate how similar two restaurants are to one another. 
@@ -191,17 +179,10 @@
   
   (binding [relevance-value 0]
     (doseq [attribute restaurant]
-      (cond
-        (= :restaurant-name (key attribute)) (set! relevance-value (+ relevance-value (compare-restaurant-names (val attribute) ((key attribute)user-restaurant))))
-        (= :rating (key attribute)) (set! relevance-value (+ relevance-value (compare-rating (val attribute) ((key attribute)user-restaurant))))
-        (= :location (key attribute)) (set! relevance-value (+ relevance-value (compare-location (val attribute) ((key attribute)user-restaurant))))
-        (= (val attribute) ((key attribute)user-restaurant)) (set! relevance-value (+ relevance-value ((key attribute)(get-weights))))))
-      (double relevance-value)))
+      (set! relevance-value (+ relevance-value (compare-attribute attribute ((key attribute)user-restaurant)))))
+    (double relevance-value)))
 
 
-
-;TODO: Rewrite this so that it dosen't loop over an index
-;Use the take function or a recurssion of first & rest operations
 (defn print-top-ten
   "This simple function just puts
    the top ten restaurants, which
@@ -211,10 +192,11 @@
    exit the program on close"
   [sorted-restaurant-names]
   
-  (loop [i 0
+  (loop [remaining-restaurant-sequence (take 10 (seq sorted-restaurant-names))
          content-vector []]
-    (if (> i 10)
+    (if (empty? remaining-restaurant-sequence)
       (draw-temp-window content-vector)
-      (recur (inc i) (conj content-vector (name (key (nth (seq sorted-restaurant-names) i))))))))
+      (let [[head & remain] remaining-restaurant-sequence]
+        (recur remain (conj content-vector (name (key head))))))))
 
 
