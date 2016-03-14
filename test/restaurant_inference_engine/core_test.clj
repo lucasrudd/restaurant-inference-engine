@@ -31,7 +31,9 @@
 (def ^:const test-file "test/resources/TestDatabase.txt")
 
 (deftest how-equal-test
-  (testing "Testing how-equal? function..."
+  (testing "Testing how-equal? function...
+            The format of the how-equal? parameters
+            is as follows: (how-equal? restaurant user-restaurant)"
     
     (is (== 45    (how-equal? (nth test-restaurants 0) (nth test-restaurants 0))))
     (is (== 44    (how-equal? (nth test-restaurants 0) (nth test-restaurants 1))))
@@ -42,7 +44,7 @@
     (is (== 33.75 (how-equal? (nth test-restaurants 0) (nth test-restaurants 6))))
     (is (== 26.75 (how-equal? (nth test-restaurants 0) (nth test-restaurants 7))))
     (is (== 18.75 (how-equal? (nth test-restaurants 0) (nth test-restaurants 8))))
-    (is (== 9.75  (how-equal? (nth test-restaurants 0) (nth test-restaurants 9))))
+    (is (== (+ (* 9 (double (/ 13 17))) 9.75)  (how-equal? (nth test-restaurants 0) (nth test-restaurants 9))))
            
     (is (== (+ 3.75 (* 9 (double (/ 13 17)))) (how-equal? (nth test-restaurants 9) (nth test-restaurants 0))))))
     ;(is (== 0 (how-equal? (nth test-restaurants 9) default-restaurant)))

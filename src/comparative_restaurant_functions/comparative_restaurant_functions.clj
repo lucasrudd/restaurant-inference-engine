@@ -30,7 +30,11 @@
 ;the definitions for the weights.
 ;The weights are formated as a Restaurant for ease of access
 ;but perhaps would make more sense formatted slightly differently  
-(def ^:private ^:const weights (Restaurant. 9 8 7 6 5 4 3 2 1))
+(def ^:private ^:const weights (Restaurant. 9 8 
+                                            7 6 
+                                            5 4 
+                                            3 2 
+                                            1))
 
 
 ; --------------------------
@@ -81,9 +85,10 @@
   
   (let [restaurant-length (count (val restaurant-name))
        user-length (count  user-name)]
-    (if (.contains (val restaurant-name) user-name)
-      (* (double (/ user-length restaurant-length)) (:restaurant-name weights))
-      0.0)))
+    (cond 
+      (.contains (val restaurant-name) user-name) (* (double (/ user-length restaurant-length)) (:restaurant-name weights)) 
+      (.contains user-name (val restaurant-name)) (* (double (/ restaurant-length user-length)) (:restaurant-name weights))
+      :else 0.0)))
 
 
 (defmethod compare-attribute :rating
