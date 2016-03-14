@@ -23,6 +23,7 @@ others (like the restaurant name) are given a partial score based on
 how closely it matches the user input. For more information see
 "Restaurant Attributes."
 
+
 ## Examples
 
 Take the Restaurant record to be given by

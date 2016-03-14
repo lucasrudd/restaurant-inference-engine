@@ -1,19 +1,129 @@
-Each resturant is represented as a clojure record (which is
-equivelent to a Java class) with the following attributes:
+# restaurant-inference-engine
 
 
-Type of Cuisine - 8
-Rating - 7
-Location - 6
-Price - 5
-BYOB - 4
-Atmosphere - 3
-Diner's Allergies - 2
-How long it has been in business - 1
+## Format
 
-Each attribute is assigned a weight from 1 - 8 (1 being the least
-important, 8 being the most important) and is given a total score
+The text file that is to be read from this program should not have
+any heading. It should be formated with commas as delimiters. Spaces
+can be put before or after the comma, but performance will be increased
+(especially for large databased) if spaces are left out.
+
+The text file should list the restaurant-name first. The restaurant
+name may be multiple words long but should not have any commas.
+
+Next the file should list the type of cusine. The type of cuisine
+should be chosen from the following list:
+
+American
+Barbecue
+Chinese
+French
+Grill
+Hamburger
+Indian 
+Italian
+Japanese 
+Mexican
+Pizza
+Seafood
+Steak
+Sushi
+Thai
+
+The rating should then be listed as a double (accurate to the
+tenth's place) from 1.0 to 5.0 where 1.0 is the lowest rating and 
+5.0 is the highest rating.
+
+Next, the location should be listed. The location should also be listed
+as a double (accurate to the tenth's place) from 0.0 to 20.0. The location
+should be listed as the distance (in miles) from a central location. For
+this beta I used the central location as a fixed point (namely my apartment),
+but the location could, theoretically, be listed as the distance from the
+user's location at the time of submitting the search criteria. This would be
+easy to do for cell phone applications.
+
+Next, the price is listed as a string. The strings range from the cheapest option
+"$" to the most expensive option "$$$$."
+
+After the price listing, allergies are listed. Potential allergies found in the
+restaurant should be chosen from the following list:
+
+Lactose
+Mussels
+None
+Nuts
+Shellfish
+
+Lastly, the age of the business should be listed. The age should be an integer rounded
+to the nearest year.
+
+
+### Attributes
+
+Each resturant is represented as a clojure record with the following attributes:
+
+Restaurant name (str) - 9
+Type of Cuisine (str) - 8
+Rating (double) - 7
+Location (from a central point) (double) - 6
+Price (str) - 5
+Bring your own beer (boolean) - 4
+Atmosphere (str) - 3
+Potential Diner Allergies (str) - 2
+Age of the Business (int) - 1
+
+Each attribute is assigned a weight from 1 - 9 (1 being the least
+important, 9 being the most important) and is given a total score
 of how strongly it fits the user's search criteria.
+
+
+#### Motivation
+
+The logic for the values of the weighting scale is as follows:
+
+Imagine the user inputs values such that the program creates
+an instance of the Restaurant record which has the following values:
+
+(Restaurant "Japanese Diner" "Chinese"
+            ...)
+
+Where only the name and tpe of cuisine are shown.
+
+Now imagine that there are two restaurants in the data base which 
+create instances of the Restaurant record which have the following
+form:
+
+(1) (Restaurant "Japanese Diner" "Japanese"
+                ...)
+
+(2) (Restaurant "Chinese Diner"  "Chinese"
+                ...)
+
+
+A human being would think that the most relevant criteria for the
+user's search would be the restaurant named "Japanese Diner" and
+that the user simply was mistaken in thinking that the restaurant
+was Chinese food.
+So, it would be desirable for the program to output Restaurant (1)
+as the most relevant Restaurant found and Restaurant (2) second most
+relevant Restaurant found.
+However, neither Restaurant matches the search criteria exaclty! So,
+if a point system is not introduced neighter Restaurant would be
+presented to the user.
+Thus, our first logical step may be to give one "point" to a
+Restaurant for each attribute that properly matches the user input. 
+Then, whichever Restaurant had the most points would be deemed most 
+relevant to the user's search criteria.
+
+This, however, would give both Restaurant (1) and Restaurant (2) the
+same amount of points! As humans, we would naturally give more importance
+to an exact match of the Restaurant name than we would to the
+Restaurant cuisine (although both are important). So then, the name
+must be given more "points" to the total relevance value than the
+cuisine.
+
+
+##### Additions
 
 Perhaps include a "Potluck Dinner" option in which the user inputs
 ONE criteria, and the program randomly assigns all the rest. Then
