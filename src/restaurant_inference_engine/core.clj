@@ -1,8 +1,9 @@
 (ns restaurant-inference-engine.core
+  (:gen-class)
   (:require [clojure.string :as str]
             [restaurant-inference-engine.priority-map :refer :all]
             [comparative-restaurant-functions.comparative-restaurant-functions :refer :all]
-            [restaurant-gui.core :refer :all]
+            [restaurant-gui.gui-core :refer :all]
             [clojure.core.async :as a 
                                 :refer [>! <! >!! <!! go chan buffer close!]])
   (:import  (java.io BufferedReader FileReader)))
@@ -82,13 +83,22 @@
 
 
 ;TODO: Change binding, doseq, and set! functions to a single recursive loop
+;Something like this may work
+; (with-open [reader (BufferedReader. (FileReader. filename))]
+;   (loop [remaining-lines (line-seq reader)
+;         file-contents (vector)]
+;     (if (empty? remaining-lines)
+;       file-contents
+;       (let [[head & remain] remaining-lines]
+;         (recur remain (conj file-contents head))))))
+
 (defn process-file
   "This function takes a file and reads each line from it.
    The lines are then split by the commas and made into a Restaurant
    The Restaurant is then put at the end of the restaurant-vector.
    After the whole file is read restaurant-vector is returned"
   [filename]
-  
+
   (binding [restaurant-vector (vector)]
     (with-open [reader (BufferedReader. (FileReader. filename))]
       (doseq [line (line-seq reader)] 
@@ -166,21 +176,19 @@
        restaurant-relevance-value)))
 
 
-;TODO: Figure out a way to write write the binding, doseq, and set! functions
-;as a single recursive loop statment.
-;TODO: At the moment how-equal? checks if things are EXACTLY equal.
-;how-equal? need to check if a restaurant is 'x' price OR LESS. 
-;Consider a 100 points scale to avoid FP values for the compare-names
 (defn how-equal?
   "The following two functions (how-equal? and calculate-relevance) work 
    in tandum to calculate how similar two restaurants are to one another. 
    This similarity is then mapped to a relevance value for sorting"
   [restaurant user-restaurant]
   
-  (binding [relevance-value 0]
-    (doseq [attribute restaurant]
-      (set! relevance-value (+ relevance-value (compare-attribute attribute ((key attribute)user-restaurant)))))
-    (double relevance-value)))
+  (loop [relevance-value 0
+         remaining-attributes (seq restaurant)]
+   
+    (if (empty? remaining-attributes)
+      (double relevance-value)
+      (let [[head & remain] remaining-attributes]
+        (recur (+ relevance-value (compare-attribute head ((key head)user-restaurant))) remain)))))
 
 
 (defn print-top-ten

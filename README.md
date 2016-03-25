@@ -71,4 +71,5 @@ The "how-equal-test" provides a variety of input example senerios.
 
 ### Bugs
 
-...
+When you choose something other than "No Preference" for BYOB the program spits out a 
+"cannot count boolean" error.

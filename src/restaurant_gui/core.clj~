@@ -1,10 +1,9 @@
-(ns restaurant-gui.core
+(ns restaurant-gui.gui-core
   (:gen-class)
   (:require [clojure.core.async :as a 
                                 :refer [>! <! >!! <!! go chan buffer close!]]
             [seesaw.core :refer :all]
             [seesaw.font :refer :all]))
-  ;(:import org.pushingpixels.substance.api.SubstanceLookAndFeel))
 
 ;A channel to communicate between threads
 (def user-input (chan))
